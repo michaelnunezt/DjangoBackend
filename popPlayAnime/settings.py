@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-63uv4++t-ppjsn)mjnd!1$o-w(wd9x@9h9pchvqogr&fw7-av('
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -97,12 +98,12 @@ AUTH_USER_MODEL = 'account.User'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'animeplay',
-        'USER': 'neondb_owner',
-        'PASSWORD': 'LI6uFJkH8zmN',
-        'HOST': 'ep-lively-sky-a260fezy-pooler.eu-central-1.aws.neon.tech',
-        'PORT': '5432',  # Default PostgreSQL port
+        'ENGINE': 'django.db.backends.postgresql',  # or another engine like 'mysql', 'sqlite3', etc.
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST', default='localhost'),
+        'PORT': config('DB_PORT', default=5432, cast=int),  # Default PostgreSQL port
         'OPTIONS': {
             'sslmode': 'require',  # Ensures SSL connection
         },
